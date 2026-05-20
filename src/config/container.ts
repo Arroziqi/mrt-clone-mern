@@ -2,6 +2,7 @@ import { createContainer, asClass, asValue } from 'awilix';
 
 // We will register services, controllers, and repositories here.
 import StationModel from '../models/Station';
+import ScheduleModel from '../models/Schedule';
 import StationsService from '../modules/stations/stations.service';
 import StationsController from '../modules/stations/stations.controller';
 import SchedulesService from '../modules/schedules/schedules.service';
@@ -25,6 +26,7 @@ const container = createContainer();
 const setupContainer = () => {
   container.register({
     StationModel: asValue(StationModel),
+    ScheduleModel: asValue(ScheduleModel),
     TicketModel: asValue(TicketModel),
     UserModel: asValue(User),
     ActivityModel: asValue(ActivityModel),

@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../utils/AppError';
+import logger from '../utils/logger';
 
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   let error = { ...err };
   error.message = err.message;
 
   // Log to console for dev
-  console.error(err);
+  logger.error(err);
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {

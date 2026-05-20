@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import SchedulesService from './schedules.service';
+import { AppError } from '../../utils/AppError';
 
 class SchedulesController {
   private schedulesService: SchedulesService;
@@ -11,16 +12,29 @@ class SchedulesController {
   getStationSchedule = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const stationId = req.params.stationId as string;
-      const scheduleData = await this.schedulesService.getStationSchedule(stationId);
-      
+      const dayType = req.query.dayType as 'weekday' | 'weekend' | undefined;
+      const upcomingOnly = req.query.upcomingOnly === 'false' || req.query.upcomingOnly === '0'
+        ? false
+        : true; // defaults to true when param is absent
+
+      const scheduleData = await this.schedulesService.getStationSchedule(
+        stationId,
+        dayType,
+        upcomingOnly,
+      );
+
       res.status(200).json({
         success: true,
         message: 'Schedule retrieved successfully',
-        data: scheduleData
+        data: scheduleData,
       });
     } catch (error: any) {
-      if (error.message === 'Station not found') {
-        return res.status(404).json({ success: false, message: error.message });
+      if (error instanceof AppError) {
+        return res.status(error.statusCode).json({
+          success: false,
+          message: error.message,
+          data: null,
+        });
       }
       next(error);
     }

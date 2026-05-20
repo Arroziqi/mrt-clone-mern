@@ -53,3 +53,13 @@ export const getRouteDetailSchema = z.object({
     to: z.string().min(1, 'Destination station (to) is required')
   })
 });
+
+export const getStationScheduleSchema = z.object({
+  params: z.object({
+    stationId: z.string().min(1, 'Station ID is required'),
+  }),
+  query: z.object({
+    dayType: z.enum(['weekday', 'weekend']).optional(),
+    upcomingOnly: z.string().optional(),
+  }),
+});
