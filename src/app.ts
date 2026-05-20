@@ -14,6 +14,9 @@ import stationsRoutes from './modules/stations/stations.routes';
 import schedulesRoutes from './modules/schedules/schedules.routes';
 import ticketsRoutes from './modules/tickets/tickets.routes';
 import contentRoutes from './modules/content/content.routes';
+import vouchersRoutes from './modules/vouchers/vouchers.routes';
+import transactionsRoutes from './modules/transactions/transactions.routes';
+import paymentsRoutes from './modules/payments/payments.routes';
 
 const app = express();
 
@@ -43,6 +46,9 @@ app.use('/api/v1/stations', stationsRoutes(container));
 app.use('/api/v1/schedules', schedulesRoutes(container));
 app.use('/api/v1/tickets', ticketsRoutes(container));
 app.use('/api/v1/content', contentRoutes(container));
+app.use('/api/v1/vouchers', vouchersRoutes(container));
+app.use('/api/v1/transactions', transactionsRoutes(container));
+app.use('/api/v1/payments', paymentsRoutes(container));
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ success: true, message: 'Server is healthy' });

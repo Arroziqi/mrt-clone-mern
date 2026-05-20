@@ -78,7 +78,7 @@ class AuthService {
 
   async updateProfile(userId: string, data: any) {
     const user = await this.UserModel.findByIdAndUpdate(userId, data, {
-      new: true,
+      returnDocument: 'after',
       runValidators: true
     });
 

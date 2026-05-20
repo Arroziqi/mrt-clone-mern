@@ -21,6 +21,16 @@ import UsersController from '../modules/users/users.controller';
 import ContentService from '../modules/content/content.service';
 import ContentController from '../modules/content/content.controller';
 
+// Payment system
+import VoucherModel from '../models/Voucher';
+import TransactionModel from '../models/Transaction';
+import VouchersService from '../modules/vouchers/vouchers.service';
+import VouchersController from '../modules/vouchers/vouchers.controller';
+import TransactionsService from '../modules/transactions/transactions.service';
+import TransactionsController from '../modules/transactions/transactions.controller';
+import PaymentsService from '../modules/payments/payments.service';
+import PaymentsController from '../modules/payments/payments.controller';
+
 const container = createContainer();
 
 const setupContainer = () => {
@@ -32,6 +42,8 @@ const setupContainer = () => {
     ActivityModel: asValue(ActivityModel),
     NotificationModel: asValue(NotificationModel),
     PaymentMethodModel: asValue(PaymentMethodModel),
+    VoucherModel: asValue(VoucherModel),
+    TransactionModel: asValue(TransactionModel),
     stationsService: asClass(StationsService).scoped(),
     stationsController: asClass(StationsController).scoped(),
     schedulesService: asClass(SchedulesService).scoped(),
@@ -43,7 +55,14 @@ const setupContainer = () => {
     usersService: asClass(UsersService).scoped(),
     usersController: asClass(UsersController).scoped(),
     contentService: asClass(ContentService).scoped(),
-    contentController: asClass(ContentController).scoped()
+    contentController: asClass(ContentController).scoped(),
+    // Payment system
+    vouchersService: asClass(VouchersService).scoped(),
+    vouchersController: asClass(VouchersController).scoped(),
+    transactionsService: asClass(TransactionsService).scoped(),
+    transactionsController: asClass(TransactionsController).scoped(),
+    paymentsService: asClass(PaymentsService).scoped(),
+    paymentsController: asClass(PaymentsController).scoped(),
   });
 };
 

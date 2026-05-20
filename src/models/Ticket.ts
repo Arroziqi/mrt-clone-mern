@@ -1,7 +1,8 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
 export interface ITicket extends Document {
-  // userId: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
+  transaction: mongoose.Types.ObjectId | null;
   departureStation: string;
   destinationStation: string;
   passengers: number;
@@ -17,7 +18,8 @@ export interface ITicket extends Document {
 }
 
 const ticketSchema = new Schema<ITicket>({
-  // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  transaction: { type: mongoose.Schema.Types.ObjectId, ref: 'Transaction', default: null },
   departureStation: { type: String, required: true },
   destinationStation: { type: String, required: true },
   passengers: { type: Number, required: true, default: 1 },

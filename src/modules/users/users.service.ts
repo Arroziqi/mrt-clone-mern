@@ -30,7 +30,7 @@ class UsersService {
     const user = await this.UserModel.findByIdAndUpdate(
       userId,
       { fullName, phoneNumber },
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     if (!user) {
       throw new Error('User not found');

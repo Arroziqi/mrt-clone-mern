@@ -3,6 +3,7 @@ dotenv.config();
 import mongoose from 'mongoose';
 import Station from './models/Station';
 import Schedule from './models/Schedule';
+import Voucher from './models/Voucher';
 import connectDB from './config/db';
 import logger from './utils/logger';
 
@@ -24,6 +25,49 @@ const stationsData = [
   { stationId: 'STN-SR', name: 'Sarinah', orderIndex: 14, basePriceRp: 3000 },
   { stationId: 'STN-MN', name: 'Monas', orderIndex: 15, basePriceRp: 3000 },
   { stationId: 'STN-HM', name: 'Harmoni', orderIndex: 16, basePriceRp: 3000 },
+];
+
+// ── Voucher seed data ────────────────────────────────────────────────
+const vouchersData = [
+  {
+    code: 'DISKON50',
+    description: 'Diskon 50% untuk perjalanan pertama (maks Rp 5.000)',
+    discountAmount: null,
+    discountPercentage: 50,
+    maxDiscountAmount: 5000,
+    minTransactionAmount: 3000,
+    usageLimit: 100,
+    usageCount: 0,
+    validFrom: new Date('2025-01-01'),
+    validUntil: new Date('2027-12-31'),
+    isActive: true,
+  },
+  {
+    code: 'HEMAT3K',
+    description: 'Potongan langsung Rp 3.000',
+    discountAmount: 3000,
+    discountPercentage: null,
+    maxDiscountAmount: null,
+    minTransactionAmount: 5000,
+    usageLimit: 50,
+    usageCount: 0,
+    validFrom: new Date('2025-01-01'),
+    validUntil: new Date('2027-12-31'),
+    isActive: true,
+  },
+  {
+    code: 'EXPIRED01',
+    description: 'Voucher kadaluarsa (untuk testing)',
+    discountAmount: 1000,
+    discountPercentage: null,
+    maxDiscountAmount: null,
+    minTransactionAmount: 0,
+    usageLimit: 0,
+    usageCount: 0,
+    validFrom: new Date('2024-01-01'),
+    validUntil: new Date('2024-12-31'),
+    isActive: true,
+  },
 ];
 
 // ── Schedule generation helpers ──────────────────────────────────────
@@ -124,10 +168,8 @@ function buildScheduleDocuments() {
 
     for (const station of stationsData) {
       // Northbound: toward Harmoni (orderIndex 16)
-      // Trains originate at Lebak Bulus (orderIndex 1) and travel north.
-      // Harmoni itself has no northbound departures.
       if (station.orderIndex < 16) {
-        const hopsFromSouthTerminus = station.orderIndex - 1; // Lebak Bulus = 0 hops
+        const hopsFromSouthTerminus = station.orderIndex - 1;
         const offset = hopsFromSouthTerminus * minutesPerHop;
         docs.push({
           stationId: station.stationId,
@@ -138,10 +180,8 @@ function buildScheduleDocuments() {
       }
 
       // Southbound: toward Lebak Bulus Grab (orderIndex 1)
-      // Trains originate at Harmoni (orderIndex 16) and travel south.
-      // Lebak Bulus itself has no southbound departures.
       if (station.orderIndex > 1) {
-        const hopsFromNorthTerminus = 16 - station.orderIndex; // Harmoni = 0 hops
+        const hopsFromNorthTerminus = 16 - station.orderIndex;
         const offset = hopsFromNorthTerminus * minutesPerHop;
         docs.push({
           stationId: station.stationId,
@@ -165,6 +205,7 @@ const seedData = async () => {
     // Clear existing data
     await Station.deleteMany();
     await Schedule.deleteMany();
+    await Voucher.deleteMany();
 
     // Insert stations
     await Station.insertMany(stationsData);
@@ -174,6 +215,10 @@ const seedData = async () => {
     const scheduleDocs = buildScheduleDocuments();
     await Schedule.insertMany(scheduleDocs);
     logger.info(`✔ Schedules seeded successfully (${scheduleDocs.length} documents)`);
+
+    // Insert vouchers
+    await Voucher.insertMany(vouchersData);
+    logger.info(`✔ Vouchers seeded successfully (${vouchersData.length} documents)`);
 
     logger.info('Data Seeded Successfully');
     process.exit();

@@ -63,3 +63,25 @@ export const getStationScheduleSchema = z.object({
     upcomingOnly: z.string().optional(),
   }),
 });
+
+export const applyVoucherSchema = z.object({
+  body: z.object({
+    code: z.string().min(1, 'Voucher code is required'),
+    departureId: z.string().min(1, 'Departure station is required'),
+    destinationId: z.string().min(1, 'Destination station is required'),
+    passengers: z.number().int().min(1, 'At least 1 passenger is required'),
+    isRoundTrip: z.boolean().optional().default(false),
+    addOnProteksi: z.boolean().optional().default(false),
+  }),
+});
+
+export const createPaymentSchema = z.object({
+  body: z.object({
+    departureId: z.string().min(1, 'Departure station is required'),
+    destinationId: z.string().min(1, 'Destination station is required'),
+    passengers: z.number().int().min(1, 'At least 1 passenger is required'),
+    isRoundTrip: z.boolean().optional().default(false),
+    addOnProteksi: z.boolean().optional().default(false),
+    voucherCode: z.string().optional(),
+  }),
+});
