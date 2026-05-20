@@ -36,6 +36,27 @@ class TransactionsController {
   };
 
   /**
+   * GET /transactions/pending
+   */
+  getPending = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = (req as any).user;
+      
+      const result = await this.transactionsService.getPendingTransactions(
+        user._id.toString()
+      );
+
+      res.status(200).json({
+        success: true,
+        message: 'Pending transactions retrieved',
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
    * GET /transactions/:orderId
    */
   getByOrderId = async (req: Request, res: Response, next: NextFunction) => {

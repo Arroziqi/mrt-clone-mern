@@ -61,6 +61,24 @@ class TransactionsService {
   }
 
   /**
+   * Get all pending transactions for a specific user (no pagination).
+   */
+  async getPendingTransactions(userId: string) {
+    const transactions = await this.TransactionModel.find({
+      user: new mongoose.Types.ObjectId(userId),
+      status: 'PENDING',
+    })
+      .populate({
+        path: 'ticket',
+        select: 'departureStation destinationStation passengers isRoundTrip addOnProteksi totalPrice status',
+      })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return transactions.map((tx) => this.formatTransaction(tx));
+  }
+
+  /**
    * Get a single transaction by orderId for the authenticated user.
    */
   async getTransactionByOrderId(orderId: string, userId: string) {

@@ -45,6 +45,22 @@ export default (container: AwilixContainer) => {
 
   /**
    * @openapi
+   * /transactions/pending:
+   *   get:
+   *     tags:
+   *       - Transactions
+   *     summary: Get pending transactions
+   *     description: Returns a list of all pending transactions for the authenticated user without pagination.
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Pending transactions retrieved successfully
+   */
+  router.get('/pending', api('getPending'));
+
+  /**
+   * @openapi
    * /transactions/{orderId}:
    *   get:
    *     tags:
