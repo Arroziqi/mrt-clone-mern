@@ -17,9 +17,9 @@ class TicketsService {
     
     if (!dep || !dest) throw new Error('Invalid station IDs');
 
-    // Simple pricing logic: 3000 base + 1000 per station difference
-    const diff = Math.abs(dep.orderIndex - dest.orderIndex);
-    let unitPrice = 3000 + (diff * 1000);
+    // Compute ticket price between two stations (Rp 1.000 per station hop, min Rp 3.000).
+    const hops = Math.abs(dep.orderIndex - dest.orderIndex);
+    let unitPrice = hops <= 1 ? 3000 : hops * 1000;
     
     if (isRoundTrip) unitPrice *= 2;
     

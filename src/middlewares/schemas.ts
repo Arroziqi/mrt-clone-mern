@@ -24,3 +24,32 @@ export const updateProfileSchema = z.object({
     age: z.number().int().positive().optional()
   })
 });
+
+export const getAllStationsSchema = z.object({
+  query: z.object({
+    page: z.preprocess((val) => (val ? parseInt(val as string, 10) : undefined), z.number().int().min(1).optional()),
+    limit: z.preprocess((val) => (val ? parseInt(val as string, 10) : undefined), z.number().int().min(1).optional())
+  })
+});
+
+export const searchStationsSchema = z.object({
+  query: z.object({
+    q: z.string().min(1, 'Search query is required'),
+    page: z.preprocess((val) => (val ? parseInt(val as string, 10) : undefined), z.number().int().min(1).optional()),
+    limit: z.preprocess((val) => (val ? parseInt(val as string, 10) : undefined), z.number().int().min(1).optional())
+  })
+});
+
+export const calculateFareSchema = z.object({
+  query: z.object({
+    from: z.string().min(1, 'Departure station (from) is required'),
+    to: z.string().optional()
+  })
+});
+
+export const getRouteDetailSchema = z.object({
+  query: z.object({
+    from: z.string().min(1, 'Departure station (from) is required'),
+    to: z.string().min(1, 'Destination station (to) is required')
+  })
+});
